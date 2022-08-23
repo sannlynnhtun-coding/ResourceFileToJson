@@ -15,7 +15,7 @@ namespace ResourceFileToJson
 
             var result = new
             {
-                Texts = XElement.Parse(xml)
+                Data = XElement.Parse(xml)
                     .Elements("data")
                     .Select(el => new
                     {
@@ -26,7 +26,7 @@ namespace ResourceFileToJson
             };
 
             string res = "{";
-            var obj = result.Texts.Select(x =>
+            var obj = result.Data.Select(x =>
             {
                 string item = $"\"{x.id}\":\"{x.text.Replace("\r", " ").Replace("\n", " ")}\"";
                 return item;
@@ -37,9 +37,6 @@ namespace ResourceFileToJson
 
             string json = JsonConvert.SerializeObject(obj, Formatting.Indented);
 
-            // OR:
-            //JavaScriptSerializer jss = new JavaScriptSerializer();
-            //string json = jss.Serialize(obj);
             File.WriteAllText(Path.GetFileNameWithoutExtension(path) + ".json", res);
             Console.WriteLine(res);
         }
