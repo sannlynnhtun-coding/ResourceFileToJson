@@ -10,7 +10,12 @@ namespace ResourceFileToJson
     {
         static void Main(string[] args)
         {
-            string path = @"MessageResource.en-GB.resx";
+            string path = @"MessageResource.my-MM.resx";
+            if (!File.Exists(path))
+            {
+                Console.WriteLine("File not found!");
+                return;
+            }
             var xml = File.ReadAllText(path);
 
             var result = new
@@ -35,10 +40,10 @@ namespace ResourceFileToJson
             res += jsonStr;
             res += "}";
 
-            string json = JsonConvert.SerializeObject(obj, Formatting.Indented);
+            string json = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(res), Formatting.Indented);
 
             File.WriteAllText(Path.GetFileNameWithoutExtension(path) + ".json", res);
-            Console.WriteLine(res);
+            Console.WriteLine(json);
         }
     }
 }
